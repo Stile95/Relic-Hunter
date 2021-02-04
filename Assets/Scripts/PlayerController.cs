@@ -4,153 +4,208 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Animator _animator;
-    Rigidbody2D _rigidBody2D;
+    private Rigidbody2D _rigidBody2D;
+    private Animator _animator;
+    private BoxCollider2D _boxCollider2D;
 
     [Header("Movement")]
-    public float MovementSpeed = 2.0f;
-    public float airMoveSpeed = 30f;
-    private float _movementHorizontal;
-    private bool _isFacingRight = true;
-
-
-    [Header("Jummping")]
-    public float JumpVelocity = 5f;
-    public bool isGrounded = true;
-    public Transform GroundCheck;
-    public LayerMask groundLayerMask;
-    private bool canJump;
-
-    [Header("Wall Sliding")]
-    public Transform WallCheck;
-    public Vector2 wallCheckSize;
-    public float wallSlideSpeed = 0;
-    public LayerMask wallLayerMask;
+    public float movementHorizontal;
+    public float movementSpeed = 3.0f;
+    public bool isWalking;
+    public bool isGrounded;
+    public bool isFacingRight = true;
     public bool isTouchingWall;
+    public bool isCrouched;
+    public Vector2 groundCheckSize;
+
+
+    [Header("Jumping")]
+    public float jumpForce = 16.0f;
+    public bool canJump;
+    public float movementForceInAir;
+    public bool isJumping;
+
+    [Header("Wall jumping and sliding")]
+    public float wallCheckDistance;
+    public float wallSlidingSpeed;
+    public float wallJumpForce;
+    public Vector2 wallJumpDirection;
     public bool isWallSliding;
 
-    [Header("Wall Jumping")]
-    public float wallJumpForce = 18f;
-    public float wallJumpDirection = -1f;
-    public Vector2 wallJumpAngle;
+
+    [Header("Other")]
+    public LayerMask wallLayer;
+    public LayerMask groundLayer;
+    public Transform wallCheck;
+    public Transform groundCheck;
 
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
-        wallJumpAngle.Normalize();
+        _animator = GetComponent<Animator>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
+        wallJumpDirection.Normalize();
     }
+
+
 
     private void Update()
     {
-        WorldCheck();
-        Inputs();
+        CheckInput();
+        CheckMovementDirection();
+        UpdateAnimations();
+        CheckIfCanJump();
+        CheckIfWallSliding();
+        CheckIfJumping();
     }
 
     private void FixedUpdate()
     {
-        Movement();
-        Jump();
-        WallSlide();
-        WallJump();
+        ApplyMovement();
+        CheckWorld();
     }
 
-    public void WorldCheck()
-    {
-        isGrounded = Physics2D.Linecast(transform.position, GroundCheck.position, groundLayerMask);
-        isTouchingWall = Physics2D.OverlapBox(WallCheck.position, wallCheckSize, 0, wallLayerMask);
-
-    }
-
-    private void Movement()
-    {
-
-        if (_movementHorizontal != 0)
-            _animator.SetBool("IsRunning", true);
-        else
-            _animator.SetBool("IsRunning", false);
-        if (isGrounded)
-        {
-            _rigidBody2D.velocity = new Vector2(_movementHorizontal * MovementSpeed, _rigidBody2D.velocity.y);
-        }
-        else if(!isGrounded && !isWallSliding && _movementHorizontal != 0)
-        {
-            _rigidBody2D.AddForce(new Vector2(airMoveSpeed * _movementHorizontal, 0));
-        }
-
-        if (_movementHorizontal < 0 && _isFacingRight)
-            Flip();
-        else if (_movementHorizontal > 0 && !_isFacingRight)
-        {
-            Flip();
-        }
-
-    }
-
-    private void Inputs()
-    {
-        _movementHorizontal = Input.GetAxis("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Space))
-            canJump = true;
-    }
-
-    public void Jump()
-    {
-        if (canJump && isGrounded)
-            _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, JumpVelocity);
-        canJump = false;
-    }
-
-    private void WallSlide()
+    private void CheckIfWallSliding()
     {
         if (isTouchingWall && !isGrounded && _rigidBody2D.velocity.y < 0)
             isWallSliding = true;
         else
             isWallSliding = false;
-
-        if (isWallSliding)
-            _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, wallSlideSpeed);
     }
 
-    private void WallJump()
+    private void CheckIfJumping()
     {
-        if((isWallSliding || isTouchingWall) && canJump)
-        {
-            _rigidBody2D.AddForce(new Vector2(wallJumpForce * wallJumpDirection * wallJumpAngle.x, wallJumpForce * wallJumpAngle.y), ForceMode2D.Impulse);
+        if (_rigidBody2D.velocity.y != 0 && !isGrounded)
+            isJumping = true;
+        else
+            isJumping = false;
+
+    }
+
+    private void CheckWorld()
+    {
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0, groundLayer);
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, wallLayer);
+    }
+
+    private void CheckIfCanJump()
+    {
+
+        if ((isGrounded && _rigidBody2D.velocity.y <= 0) || isWallSliding)
+            canJump = true;
+        else
             canJump = false;
+    }
+
+    private void CheckMovementDirection()
+    {
+        if(isFacingRight && movementHorizontal < 0)
+        {
+            Flip();
+        }
+        else if (!isFacingRight && movementHorizontal > 0)
+        {
+            Flip();
         }
 
+        if (_rigidBody2D.velocity.x != 0 && isGrounded)
+            isWalking = true;
+        else
+            isWalking = false;
+    }
+
+    private void CheckInput()
+    {
+        if(!isCrouched)
+        movementHorizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+
+        if (isGrounded && Input.GetKeyDown(KeyCode.S))            //crouch mehanika
+        {
+            isCrouched = true;
+            _boxCollider2D.enabled = false;
+        }
+        else if (isGrounded && Input.GetKeyUp(KeyCode.S))
+        {
+            isCrouched = false;
+            _boxCollider2D.enabled = true;
+        }
+
+        if(isCrouched)
+        {
+            movementHorizontal = 0;
+        }
+    }
+
+    private void Jump()
+    {
+        if(canJump && !isCrouched)
+        _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, jumpForce);
+
+        else if((isWallSliding || isTouchingWall) && movementHorizontal != 0 && canJump)
+        {
+            isWallSliding = false;
+            Vector2 forceToAdd = new Vector2(wallJumpForce * wallJumpDirection.x * movementHorizontal, wallJumpForce * wallJumpDirection.y);
+            _rigidBody2D.AddForce(forceToAdd, ForceMode2D.Impulse);
+
+        }
+    }
+
+
+    private void ApplyMovement()
+    {
+        if (isGrounded)
+        {
+            _rigidBody2D.velocity = new Vector2(movementHorizontal * movementSpeed, _rigidBody2D.velocity.y);
+
+        }
+        else if (!isGrounded && !isWallSliding && movementHorizontal != 0)
+        {
+            Vector2 forceToAdd = new Vector2(movementForceInAir * movementHorizontal, 0);
+            _rigidBody2D.AddForce(forceToAdd);
+
+            if (Mathf.Abs(_rigidBody2D.velocity.x) > movementSpeed)   
+                _rigidBody2D.velocity = new Vector2(movementSpeed * movementHorizontal, _rigidBody2D.velocity.y);    
+        }
+        
+        if (isWallSliding)
+        {
+            if(_rigidBody2D.velocity.y < -wallSlidingSpeed)
+            {
+                _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, -wallSlidingSpeed);
+            }
+        }
     }
 
     private void Flip()
     {
-        wallJumpDirection *= -1;
-        Vector3 localScale = transform.localScale;
+        if (!isWallSliding)
+        {
+            isFacingRight = !isFacingRight;
+            transform.Rotate(0, 180, 0);
+        }
+    }
 
-        if (_movementHorizontal > 0.0f)
-            _isFacingRight = true;
-        else if (_movementHorizontal < 0.0f)
-            _isFacingRight = false;
-
-        if (((_isFacingRight) && (localScale.x < 0.0f))
-             ||
-             ((!_isFacingRight) && (localScale.x > 0.0f))
-            )
-            localScale.x *= -1.0f;
-
-        transform.localScale = localScale;
-
+    private void UpdateAnimations()
+    {
+        _animator.SetBool("IsWalking", isWalking);
+        _animator.SetBool("IsCrouched", isCrouched);
+        _animator.SetBool("IsJumping", isJumping);
     }
 
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, GroundCheck.position);
+        Gizmos.DrawCube(groundCheck.position,groundCheckSize);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(WallCheck.position, wallCheckSize);
-    }
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
 
+    }
 }
