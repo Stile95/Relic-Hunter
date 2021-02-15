@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306960811}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.352, y: 0.881, z: -0.6676731}
+  m_LocalPosition: {x: 0.57, y: 1.62, z: -0.6676731}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6776254611023320457}
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3192503517735427690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.177, y: 0.653, z: 0}
+  m_LocalPosition: {x: 0.382, y: 1.225, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6776254611023320457}
@@ -84,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6776254610780333527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: 0.063, z: 0}
+  m_LocalPosition: {x: 0.01, y: 0.117, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 6776254611023320457}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 6776254611023320500}
   - component: {fileID: 1243539683}
   - component: {fileID: 799275335}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -167,8 +167,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1668004383
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f2ed27d6c1c3ccc48959bcca269d88f0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -194,18 +194,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.005946256, y: 0.75}
+  m_Offset: {x: 0.0058813095, y: 1.5439457}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.5, y: 1.5}
+    oldSize: {x: 3, y: 3}
     newSize: {x: 1.5, y: 1.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.33935606, y: 0.9070196}
+  m_Size: {x: 0.65199184, y: 1.783191}
   m_EdgeRadius: 0
 --- !u!58 &6776254611023320458
 CircleCollider2D:
@@ -220,9 +220,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.25714064}
+  m_Offset: {x: 0.013934016, y: 0.4813519}
   serializedVersion: 2
-  m_Radius: 0.19808388
+  m_Radius: 0.36698097
 --- !u!50 &6776254611023320461
 Rigidbody2D:
   serializedVersion: 4
@@ -290,14 +290,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementHorizontal: 0
-  movementSpeed: 4
+  movementSpeed: 7
   isWalking: 0
   isGrounded: 0
   isFacingRight: 1
   isTouchingWall: 0
   isCrouched: 0
-  groundCheckSize: {x: 0.61, y: 0.02}
-  jumpForce: 11
+  groundCheckSize: {x: 1.22, y: 0.05}
+  jumpForce: 15
   canJump: 0
   movementForceInAir: 100
   isJumping: 0
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPoint: {fileID: 1306960812}
-  attackRange: 0.39
+  attackRange: 0.9
   canBeDamagedLayer:
     serializedVersion: 2
     m_Bits: 3072

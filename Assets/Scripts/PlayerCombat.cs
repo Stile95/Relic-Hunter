@@ -15,7 +15,7 @@ public class PlayerCombat : MonoBehaviour
 
     public int attackDamage = 50;
 
-
+    public Vector2 _startingPosition;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -39,12 +39,31 @@ public class PlayerCombat : MonoBehaviour
 
             foreach (Collider2D enemy in hitEnemies)
             {
-                enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+                enemy.GetComponent<EnemyHealthManager>().TakeDamage(attackDamage);
 
             }
     }
 
 
+
+    public void Die()
+    {
+        _animator.SetBool("IsDead", true);
+        _playerController.enabled = false;
+        // TODO death particle effect
+
+        GameManager.Instance.UpdateLives(-1);
+
+        Invoke("Respawn", 2);
+    }
+
+    public void Respawn()
+    {
+        transform.position = _startingPosition;
+        _animator.SetBool("IsDead", false);
+        _playerController.enabled = true;
+
+    }
 
 
     private void OnDrawGizmos()

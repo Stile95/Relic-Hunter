@@ -4,33 +4,24 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public int Value = 10;
+    public int Value = 1;
     public AudioClip PickupAudioClip;
     public ParticleSystem CoinParticleSystem;
 
-   
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.tag != "Player")
+        if (collision.tag != "Player")
 
             return;
 
-      
+        //AudioSource.PlayClipAtPoint(PickupAudioClip, transform.position);
 
-        AudioSource.PlayClipAtPoint(PickupAudioClip, transform.position);
+        GameManager.Instance.UpdateCoins(Value);
 
-        GameManager.Instance.UpdateScore(Value);
-
-            CoinParticleSystem.transform.SetParent(null);
-            CoinParticleSystem.Play();
-        
+        //CoinParticleSystem.transform.SetParent(null);
+        //CoinParticleSystem.Play();
 
         Destroy(gameObject);
-
-        
-
     }
-    
         
 }

@@ -8,47 +8,47 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public int Score = 0;
-    public Text ScoreText;
-    public GameObject GameOverCanvas;
+    public int Lives = 3;
+    public int Coins = 0;
 
+    public LivesGridController LivesGridController;
+    public Text CoinsText;
 
+    public int CoinsForNewLife;
 
-
-    //uzorak dizajna Singleton
     private void Awake()
     {
-        if (Instance != null)
-            Destroy(gameObject);
-
         Instance = this;
 
-        GameOverCanvas.gameObject.SetActive(false);
-    }
+        Lives = SaveLoadManager.LoadValue(SaveKey.Lives);
+        LivesGridController.RefreshLifeImages(Lives);
 
-    public void UpdateScore(int value)
+        Lives = SaveLoadManager.LoadValue(SaveKey.Coins);
+        CoinsText.text = Coins.ToString();
+    }
+    public void UpdateCoins(int value)
     {
+        Coins += value;
+        CoinsText.text = Coins.ToString();
 
-        Score += value;
+        if(Coins >= CoinsForNewLife)
+        {
+            Coins = 0;
+            UpdateLives(1);
+        }
 
-        if (Score < 0)
-            Score = 0;
-        //ternarni if operator
-        //        if(da li je tru ili)  ovo ako je istina : ovo ako je laz;
-        // Score = Score < 0 ? 0 : Score;
-
-        ScoreText.text = Score.ToString();
-
-
+        SaveLoadManager.SaveValue(SaveKey.Coins, Coins);
     }
-
-    public void RestartLevel()
+    public void UpdateLives(int value)
     {
+        Lives += value;
+        LivesGridController.RefreshLifeImages(Lives);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
+        SaveLoadManager.SaveValue(SaveKey.Lives, Lives);
     }
 
-  
+
 }
 
 
