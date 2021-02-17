@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public int Value = 1;
     public AudioClip PickupAudioClip;
     public ParticleSystem CoinParticleSystem;
 
@@ -16,7 +15,7 @@ public class Coin : MonoBehaviour
 
         //AudioSource.PlayClipAtPoint(PickupAudioClip, transform.position);
 
-        GameManager.Instance.UpdateCoins(Value);
+        GameManager.Instance.UpdateCoins(1);
 
         //CoinParticleSystem.transform.SetParent(null);
         //CoinParticleSystem.Play();

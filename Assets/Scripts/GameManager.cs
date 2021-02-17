@@ -20,16 +20,15 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
 
-        Lives = SaveLoadManager.LoadValue(SaveKey.Lives);
+        //Lives = SaveLoadManager.LoadValue(SaveKey.Lives);
         LivesGridController.RefreshLifeImages(Lives);
 
-        Lives = SaveLoadManager.LoadValue(SaveKey.Coins);
+        //Lives = SaveLoadManager.LoadValue(SaveKey.Coins);
         CoinsText.text = Coins.ToString();
     }
     public void UpdateCoins(int value)
     {
-        Coins += value;
-        CoinsText.text = Coins.ToString();
+        Coins++;
 
         if(Coins >= CoinsForNewLife)
         {
@@ -37,15 +36,17 @@ public class GameManager : MonoBehaviour
             UpdateLives(1);
         }
 
-        SaveLoadManager.SaveValue(SaveKey.Coins, Coins);
+        CoinsText.text = Coins.ToString();
+        //SaveLoadManager.SaveValue(SaveKey.Coins, Coins);
     }
+
     public void UpdateLives(int value)
     {
         Lives += value;
         LivesGridController.RefreshLifeImages(Lives);
 
         
-        SaveLoadManager.SaveValue(SaveKey.Lives, Lives);
+        //SaveLoadManager.SaveValue(SaveKey.Lives, Lives);
     }
 
 

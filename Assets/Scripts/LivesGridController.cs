@@ -24,7 +24,7 @@ public class LivesGridController : MonoBehaviour
         for (int i = 0; i < lifeDelta; i++)
             AddLifeImage();
 
-        for (int i = 0; i < numOfLives; i++)
+        for (int i = 0; i < LifeImages.Count; i++)
             LifeImages[i].UpdateState(i < numOfLives);
     }
 }
