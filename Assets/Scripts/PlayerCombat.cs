@@ -12,29 +12,33 @@ public class PlayerCombat : MonoBehaviour
     public Transform attackPoint;
     public float attackRange;
     public LayerMask canBeDamagedLayer;
+    //public ParticleSystem deathPartycleEffect;
 
     public int attackDamage = 50;
 
-    public Vector2 _startingPosition;
+
+    public static bool isDead = false;
+
+    private Vector2 _startingPosition;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _playerController = GetComponent<PlayerController>();
+        _startingPosition = transform.position;
     }
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0) && _playerController.isGrounded && !_playerController.isCrouched)
+        if (Input.GetMouseButtonDown(0) && _playerController.isGrounded && !_playerController.isCrouched && !PauseMenu.gameIsPaused)
         {
             _animator.SetTrigger("Attack");
         }
 
-       
     }
 
    public void Attack()
    {
-       
+        AudioManager.instance.Play("SwordSwing");
         Collider2D [] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, canBeDamagedLayer);
 
             foreach (Collider2D enemy in hitEnemies)
@@ -42,23 +46,29 @@ public class PlayerCombat : MonoBehaviour
                 enemy.GetComponent<EnemyHealthManager>().TakeDamage(attackDamage);
 
             }
+
     }
 
 
 
     public void Die()
     {
+        AudioManager.instance.Play("PlayerDeath");
+        //deathPartycleEffect.Play();
+        isDead = true;
         _animator.SetBool("IsDead", true);
         _playerController.enabled = false;
-        // TODO death particle effect
 
         GameManager.Instance.UpdateLives(-1);
-
-        Invoke("Respawn", 2);
+        if (GameManager.Instance.Lives > 0)
+            Invoke("Respawn", 2);
+        else
+            GameManager.Instance.DeathScreen.enabled = true;
     }
 
     public void Respawn()
     {
+        isDead = false;
         transform.position = _startingPosition;
         _animator.SetBool("IsDead", false);
         _playerController.enabled = true;

@@ -52,7 +52,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        CheckInput();
+        if (!PauseMenu.gameIsPaused)
+        {
+            CheckInput();
+
+        }
+       
         CheckMovementDirection();
         UpdateAnimations();
         CheckIfCanJump();
@@ -92,7 +97,7 @@ public class PlayerController : MonoBehaviour
     private void CheckIfCanJump()
     {
 
-        if ((isGrounded && _rigidBody2D.velocity.y != 0 ) || isWallSliding)
+        if (isGrounded || isWallSliding)
             canJump = true;
         else
             canJump = false;
@@ -100,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckMovementDirection()
     {
-        if(isFacingRight && movementHorizontal < 0)
+        if(isFacingRight && movementHorizontal < 0 )
         {
             Flip();
         }
@@ -117,37 +122,43 @@ public class PlayerController : MonoBehaviour
 
     private void CheckInput()
     {
-        if(!isCrouched)
-        movementHorizontal = Input.GetAxisRaw("Horizontal");
+            if (!isCrouched)
+                movementHorizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
 
-        if (isGrounded && Input.GetKeyDown(KeyCode.S))            //crouch mehanika
-        {
-            isCrouched = true;
-            _boxCollider2D.enabled = false;
-        }
-        else if (isGrounded && Input.GetKeyUp(KeyCode.S))
-        {
-            isCrouched = false;
-            _boxCollider2D.enabled = true;
-        }
+            if (isGrounded && Input.GetKeyDown(KeyCode.S))            //crouch mehanika
+            {
+                isCrouched = true;
+                _boxCollider2D.enabled = false;
+            }
+            else if (isGrounded && Input.GetKeyUp(KeyCode.S))
+            {
+                isCrouched = false;
+                _boxCollider2D.enabled = true;
+            }
 
-        if(isCrouched)
-        {
-            movementHorizontal = 0;
-        }
+            if (isCrouched || _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            {
+                movementHorizontal = 0;
+            }
+
     }
 
     private void Jump()
     {
         if(canJump && !isCrouched)
-        _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, jumpForce);
+        {
+            AudioManager.instance.Play("JumpSigh");
+            _rigidBody2D.velocity = new Vector2(_rigidBody2D.velocity.x, jumpForce);
 
-        else if((isWallSliding || isTouchingWall) && movementHorizontal != 0 && canJump)
+        }
+        
+
+        else if((isWallSliding || isTouchingWall) && movementHorizontal != 0 && canJump && !isGrounded)
         {
             isWallSliding = false;
             Vector2 forceToAdd = new Vector2(wallJumpForce * wallJumpDirection.x * movementHorizontal, wallJumpForce * wallJumpDirection.y);

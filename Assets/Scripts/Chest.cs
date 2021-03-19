@@ -4,27 +4,23 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
-    public int currentHealth = 1;
-    public int value = 3;
-
+    public AudioClip PickupAudioClip;
     public ParticleSystem ChestParticleSystem;
 
-    public void TakeDamage(int damage)
+    private void OnTriggerEnter2D(Collider2D collision )
     {
+        if (collision.tag != "Player" && PlayerCombat.isDead)
 
-        currentHealth -= damage;
+            return;
 
-        if (currentHealth <= 0)
-            DestroyChest();
-    }
+        AudioManager.instance.Play("GoldChest");
 
-    public void DestroyChest()
-    {
-        GameManager.Instance.UpdateCoins(value);
-        //ChestParticleSystem.transform.SetParent(null);
-        //ChestParticleSystem.Play();
+        GameManager.Instance.UpdateCoins(3);
+
+        ChestParticleSystem.transform.SetParent(null);
+        ChestParticleSystem.Play();
+
         Destroy(gameObject);
-
     }
 
 

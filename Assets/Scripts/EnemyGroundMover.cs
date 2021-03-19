@@ -13,6 +13,9 @@ public class EnemyGroundMover : MonoBehaviour
 
     private void Update()
     {
+        if (Enemy == null)
+            return;
+        else
         MoveEnemyTowardsCurrentWaypoint();
     }
 
@@ -25,6 +28,7 @@ public class EnemyGroundMover : MonoBehaviour
 
     private void MoveEnemyTowardsCurrentWaypoint()
     {
+        AudioManager.instance.Play("Crawling");
         Enemy.position = Vector3.MoveTowards(Enemy.position,
             Waypoints[_currentWaypointIndex].position, MovementSpeed * Time.deltaTime);
 

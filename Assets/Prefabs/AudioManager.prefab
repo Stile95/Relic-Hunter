@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6699479369633503188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7852168089433588109}
+  - component: {fileID: 1919291783}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7852168089433588109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6699479369633503188}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1919291783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6699479369633503188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db5447cb9708824a888a25ec6d7acfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Coins
+    clip: {fileID: 8300000, guid: bf3c576b9d1d1a344874e1c9eb7cdbc2, type: 3}
+    volume: 1
+    pitch: 2
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerDeath
+    clip: {fileID: 8300000, guid: 845e8879c48052740a6a4c1a8e61a07b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: JumpSigh
+    clip: {fileID: 8300000, guid: 78d38cf5698409a418e3f8d5710a37fe, type: 3}
+    volume: 0.297
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: CaveBackroundMusic
+    clip: {fileID: 8300000, guid: 9c8cacec3292ca34499176f28dc99cbd, type: 3}
+    volume: 0.136
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: GoldChest
+    clip: {fileID: 8300000, guid: 2cd3c5fd008d2de409731e1a80c27a96, type: 3}
+    volume: 0.607
+    pitch: 1.72
+    loop: 0
+    source: {fileID: 0}
+  - name: Crawling
+    clip: {fileID: 8300000, guid: b3c2c127f0c20934491c9013a0ceb55c, type: 3}
+    volume: 0.344
+    pitch: 1.24
+    loop: 1
+    source: {fileID: 0}
+  - name: ItemPickUp
+    clip: {fileID: 8300000, guid: 4cb6b92d3a4d0aa4d9950b3a977cf2f6, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: EnemyDeath
+    clip: {fileID: 8300000, guid: 56621c62c05417f40a7555e53e60fc2c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SwordSwing
+    clip: {fileID: 8300000, guid: 92f13971d37a787469361b610939dd80, type: 3}
+    volume: 4
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}

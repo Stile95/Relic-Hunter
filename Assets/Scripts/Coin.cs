@@ -9,16 +9,16 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag != "Player")
+        if (collision.tag != "Player" && PlayerCombat.isDead)
 
             return;
 
-        //AudioSource.PlayClipAtPoint(PickupAudioClip, transform.position);
+        AudioManager.instance.Play("Coins");
 
         GameManager.Instance.UpdateCoins(1);
 
-        //CoinParticleSystem.transform.SetParent(null);
-        //CoinParticleSystem.Play();
+        CoinParticleSystem.transform.SetParent(null);
+        CoinParticleSystem.Play();
 
         Destroy(gameObject);
     }

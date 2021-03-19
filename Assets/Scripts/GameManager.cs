@@ -10,34 +10,38 @@ public class GameManager : MonoBehaviour
 
     public int Lives = 3;
     public int Coins = 0;
+    public int MaximumLives = 3;
 
     public LivesGridController LivesGridController;
     public Text CoinsText;
+
+    public Canvas DeathScreen;
 
     public int CoinsForNewLife;
 
     private void Awake()
     {
         Instance = this;
+        DeathScreen.enabled = false;
 
         //Lives = SaveLoadManager.LoadValue(SaveKey.Lives);
         LivesGridController.RefreshLifeImages(Lives);
 
-        //Lives = SaveLoadManager.LoadValue(SaveKey.Coins);
+        //Coins = SaveLoadManager.LoadValue(SaveKey.Coins);
         CoinsText.text = Coins.ToString();
     }
     public void UpdateCoins(int value)
     {
         Coins++;
 
-        if(Coins >= CoinsForNewLife)
+        if(Coins >= CoinsForNewLife && Lives < MaximumLives)
         {
             Coins = 0;
             UpdateLives(1);
         }
 
         CoinsText.text = Coins.ToString();
-        //SaveLoadManager.SaveValue(SaveKey.Coins, Coins);
+        SaveLoadManager.SaveValue(SaveKey.Coins, Coins);
     }
 
     public void UpdateLives(int value)
@@ -45,8 +49,7 @@ public class GameManager : MonoBehaviour
         Lives += value;
         LivesGridController.RefreshLifeImages(Lives);
 
-        
-        //SaveLoadManager.SaveValue(SaveKey.Lives, Lives);
+        SaveLoadManager.SaveValue(SaveKey.Lives, Lives);
     }
 
 

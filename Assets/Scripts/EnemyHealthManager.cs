@@ -7,14 +7,11 @@ public class EnemyHealthManager : MonoBehaviour
     public int MaxHealth = 100;
     int currentHealth;
 
-    public GameObject DeathParticlePrefab;
-
-
+    public ParticleSystem DeathParticlePrefab;
 
     private void Awake()
     {
         currentHealth = MaxHealth;
-
     }
 
 
@@ -24,6 +21,7 @@ public class EnemyHealthManager : MonoBehaviour
 
         if(currentHealth <= 0)
         {
+            AudioManager.instance.Play("EnemyDeath");
             Die();
         }
 
@@ -31,8 +29,7 @@ public class EnemyHealthManager : MonoBehaviour
 
     private void Die()
     {
-      //  Instantiate(DeathParticlePrefab);
-
+        DeathParticlePrefab.Play();
         Destroy(gameObject);
     }
 
